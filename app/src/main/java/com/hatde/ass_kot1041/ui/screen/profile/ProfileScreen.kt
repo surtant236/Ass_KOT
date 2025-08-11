@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.hatde.ass_kot1041.R
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onNavigateToProductManagement: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,6 +53,16 @@ fun ProfileScreen() {
         Text("Số điện thoại: 0123 456 789")
 
         Spacer(modifier = Modifier.height(32.dp))
+        
+        // Product Management Button
+        Button(
+            onClick = onNavigateToProductManagement,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Quản lý sản phẩm")
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { /* TODO: Đăng xuất */ }) {
             Text("Đăng xuất")
         }

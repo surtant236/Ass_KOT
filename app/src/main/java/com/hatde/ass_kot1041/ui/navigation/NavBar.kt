@@ -6,3 +6,7 @@ sealed class BottomBarScreen(val route: String, val title: String, val icon: Str
     object Cart : BottomBarScreen("cart", "Cart")
     object Profile : BottomBarScreen("profile", "Profile")
 }
+
+object NavigationRoutes {
+    const val PRODUCT_MANAGEMENT = "product_management"
+}

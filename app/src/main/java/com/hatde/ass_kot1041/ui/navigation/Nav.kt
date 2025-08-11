@@ -10,6 +10,7 @@ import com.hatde.ass_kot1041.ui.screen.detail.ProductDetailScreen
 import com.hatde.ass_kot1041.ui.screen.favorite.FavoriteScreen
 import com.hatde.ass_kot1041.ui.screen.home.HomeScreen
 import com.hatde.ass_kot1041.ui.screen.profile.ProfileScreen
+import com.hatde.ass_kot1041.ui.screen.ProductManagementScreen
 
 @Composable
 fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -18,6 +19,15 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
         composable(BottomBarScreen.Favorite.route) { FavoriteScreen() }
         composable(BottomBarScreen.Cart.route) { CartScreen() }
         composable("product_detail") { ProductDetailScreen() }
-        composable(BottomBarScreen.Profile.route) { ProfileScreen() }
+        composable(BottomBarScreen.Profile.route) { 
+            ProfileScreen(
+                onNavigateToProductManagement = {
+                    navController.navigate(NavigationRoutes.PRODUCT_MANAGEMENT)
+                }
+            )
+        }
+        composable(NavigationRoutes.PRODUCT_MANAGEMENT) { 
+            ProductManagementScreen()
+        }
     }
 }
