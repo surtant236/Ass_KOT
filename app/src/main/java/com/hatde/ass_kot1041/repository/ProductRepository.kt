@@ -10,7 +10,7 @@ class ProductRepository {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/products")
+            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
