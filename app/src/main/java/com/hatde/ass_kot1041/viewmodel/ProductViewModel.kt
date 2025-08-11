@@ -21,7 +21,7 @@ class ProductViewModel : ViewModel() {
 
     private val api: ProductApi by lazy {
         Retrofit.Builder()
-            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/products") // base url
+            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/") // base url
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProductApi::class.java)

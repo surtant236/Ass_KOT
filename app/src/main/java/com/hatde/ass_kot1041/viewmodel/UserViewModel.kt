@@ -39,12 +39,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         prefs.edit().remove("logged_user").apply()
     }
 
-    fun register(name: String, email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+    // Đăng ký đúng mapping: username, password, email
+    fun register(username: String, password: String, email: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             isLoading.value = true
             errorMessage.value = null
             try {
-                val user = User(name = name, email = email, password = password)
+                val user = User(username = username, password = password, email = email)
                 val resp = repo.registerUser(user)
                 if (resp.isSuccessful) {
                     val created = resp.body()
@@ -65,17 +66,18 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun login(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+    // Đăng nhập bằng username, password
+    fun login(username: String, password: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             isLoading.value = true
             errorMessage.value = null
             try {
-                val user = repo.login(email, password)
+                val user = repo.login(username, password)
                 if (user != null) {
                     saveUserLocally(user)
                     onResult(true, null)
                 } else {
-                    onResult(false, "Email hoặc mật khẩu không đúng")
+                    onResult(false, "Username hoặc mật khẩu không đúng")
                 }
             } catch (e: Exception) {
                 onResult(false, e.localizedMessage ?: "Lỗi mạng")
