@@ -11,45 +11,71 @@ import com.hatde.ass_kot1041.viewmodel.UserViewModel
 @Composable
 fun RegisterScreen(
     onRegistered: () -> Unit,
+    onBackToLogin: () -> Unit = {},
     userViewModel: UserViewModel = viewModel()
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var showSuccess by remember { mutableStateOf(false) }
 
     val isLoading = userViewModel.isLoading.value
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Họ và tên") }, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Mật khẩu") }, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                userViewModel.register(name.trim(), email.trim(), password) { success, msg ->
-                    if (success) {
-                        onRegistered()
-                    } else {
-                        // Hiện lỗi theo cách bạn muốn
-                        userViewModel.errorMessage.value = msg
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+    if (showSuccess) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(if (!isLoading) "Đăng ký" else "Đang xử lý...")
+            Text(
+                text = "Đăng ký thành công!",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    showSuccess = false
+                    onBackToLogin()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Quay lại đăng nhập")
+            }
         }
-
-        userViewModel.errorMessage.value?.let { err ->
+    } else {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Username") }, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = err, color = MaterialTheme.colorScheme.error)
+            OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Mật khẩu") }, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    userViewModel.register(username.trim(), email.trim(), password) { success, msg ->
+                        if (success) {
+                            showSuccess = true
+                        } else {
+                            // Hiện lỗi theo cách bạn muốn
+                            userViewModel.errorMessage.value = msg
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading
+            ) {
+                Text(if (!isLoading) "Đăng ký" else "Đang xử lý...")
+            }
+
+            userViewModel.errorMessage.value?.let { err ->
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = err, color = MaterialTheme.colorScheme.error)
+            }
         }
     }
 }

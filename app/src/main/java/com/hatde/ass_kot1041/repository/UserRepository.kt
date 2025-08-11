@@ -25,14 +25,14 @@ class UserRepository {
     }
 
     /**
-     * "Login" bằng cách lấy danh sách users và so khớp email + password.
+     * "Login" bằng cách lấy danh sách users và so khớp username + password.
      * Lưu ý: so sánh password plaintext chỉ phù hợp cho mock / demo.
      */
-    suspend fun login(email: String, password: String): User? {
+    suspend fun login(username: String, password: String): User? {
         val resp = service.getUsers()
         if (resp.isSuccessful) {
             val list = resp.body() ?: emptyList()
-            return list.firstOrNull { it.email == email && it.password == password }
+            return list.firstOrNull { it.username == username && it.password == password }
         } else {
             return null
         }

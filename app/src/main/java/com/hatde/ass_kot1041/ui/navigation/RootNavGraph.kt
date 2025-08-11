@@ -13,8 +13,17 @@ import com.hatde.ass_kot1041.ui.screen.MainScreen
 fun RootNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "splash") {
         composable("splash") { SplashScreen(navController) }
-        composable("login") { LoginScreen(navController) }
-        composable("register") { RegisterScreen(navController) }
+        composable("login") { 
+            LoginScreen(
+                onLoginSuccess = { navController.navigate("main") }
+            )
+        }
+        composable("register") { 
+            RegisterScreen(
+                onRegistered = { navController.navigate("main") },
+                onBackToLogin = { navController.navigate("login") }
+            )
+        }
         composable("main") { MainScreen() }
     }
 }
