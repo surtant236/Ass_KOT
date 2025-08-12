@@ -17,7 +17,7 @@ class CartViewModel : ViewModel() {
 
     private val api: CartService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://689a1e8bfed141b96ba1ee56.mockapi.io/")
+            .baseUrl("https://689aef87e727e9657f631c56.mockapi.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CartService::class.java)
@@ -36,15 +36,67 @@ class CartViewModel : ViewModel() {
     fun addToCart(product: Product) {
         viewModelScope.launch {
             try {
-                val cartItem = CartItem(
-                    productId = product.id,
-                    name = product.name,
-                    image = product.image,
-                    price = product.price,
-                    quantity = 1
-                )
-                api.addToCart(cartItem)
-                fetchCart() // update lại danh sách sau khi thêm
+                val currentList = _cart.value
+                val existing = currentList.find { it.productId == product.id }
+                if (existing != null && existing.id != null) {
+                    // Nếu đã có, tăng số lượng
+                    val updated = existing.copy(quantity = existing.quantity + 1)
+                    api.updateCartItem(existing.id!!, updated)
+                } else {
+                    // Nếu chưa có, thêm mới
+                    val cartItem = CartItem(
+                        productId = product.id,
+                        name = product.name,
+                        image = product.image,
+                        price = product.price,
+                        quantity = 1
+                    )
+                    api.addToCart(cartItem)
+                }
+                fetchCart()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun increaseQuantity(item: CartItem) {
+        viewModelScope.launch {
+            try {
+                if (item.id != null) {
+                    val updated = item.copy(quantity = item.quantity + 1)
+                    api.updateCartItem(item.id, updated)
+                    fetchCart()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun decreaseQuantity(item: CartItem) {
+        viewModelScope.launch {
+            try {
+                if (item.id != null && item.quantity > 1) {
+                    val updated = item.copy(quantity = item.quantity - 1)
+                    api.updateCartItem(item.id, updated)
+                } else if (item.id != null && item.quantity == 1) {
+                    api.deleteCartItem(item.id)
+                }
+                fetchCart()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun removeFromCart(item: CartItem) {
+        viewModelScope.launch {
+            try {
+                if (item.id != null) {
+                    api.deleteCartItem(item.id)
+                    fetchCart()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
