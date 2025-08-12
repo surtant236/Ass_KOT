@@ -1,9 +1,7 @@
 package com.hatde.ass_kot1041.ui.screen.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -14,9 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hatde.ass_kot1041.ui.screen.product.ProductListScreen
+import com.hatde.ass_kot1041.viewmodel.CartViewModel
+import com.hatde.ass_kot1041.viewmodel.ProductViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    productViewModel: ProductViewModel = viewModel(),
+    cartViewModel: CartViewModel = viewModel()
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,35 +63,10 @@ fun HomeScreen() {
 
 
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(4) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                        .background(Color.White)
-                        .border(1.dp, Color.LightGray, shape = MaterialTheme.shapes.medium)
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                            .background(Color.LightGray)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("Black Simple Lamp", fontWeight = FontWeight.Bold)
-                    Text("$12.00", color = Color.Gray)
-                }
-            }
-        }
+        // Product List
+        ProductListScreen(
+            productViewModel = productViewModel,
+            cartViewModel = cartViewModel
+        )
     }
 }
