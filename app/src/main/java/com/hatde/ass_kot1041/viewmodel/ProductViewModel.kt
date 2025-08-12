@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface ProductApi {
-    @GET("products") // endpoint sau base URL
+    @GET("products")
     suspend fun getProducts(): List<Product>
 }
 
@@ -21,7 +21,7 @@ class ProductViewModel : ViewModel() {
 
     private val api: ProductApi by lazy {
         Retrofit.Builder()
-            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/") // base url
+            .baseUrl("https://689a1e8bfed141b96ba1ee55.mockapi.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProductApi::class.java)

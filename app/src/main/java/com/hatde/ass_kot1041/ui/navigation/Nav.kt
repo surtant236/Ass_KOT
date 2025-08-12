@@ -13,11 +13,21 @@ import com.hatde.ass_kot1041.ui.screen.profile.ProfileScreen
 
 @Composable
 fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(navController = navController, startDestination = BottomBarScreen.Home.route, modifier = modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = BottomBarScreen.Home.route,
+        modifier = modifier
+    ) {
         composable(BottomBarScreen.Home.route) { HomeScreen() }
         composable(BottomBarScreen.Favorite.route) { FavoriteScreen() }
         composable(BottomBarScreen.Cart.route) { CartScreen() }
-        composable("product_detail") { ProductDetailScreen() }
+        // Sửa route để nhận productId
+        composable(
+            route = "product_detail/{productId}"
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId") ?: ""
+            ProductDetailScreen(productId = productId)
+        }
         composable(BottomBarScreen.Profile.route) { ProfileScreen() }
     }
 }

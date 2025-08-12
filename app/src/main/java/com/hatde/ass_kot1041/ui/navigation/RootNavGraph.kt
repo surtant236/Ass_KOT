@@ -8,6 +8,8 @@ import com.hatde.ass_kot1041.ui.screen.auth.LoginScreen
 import com.hatde.ass_kot1041.ui.screen.auth.RegisterScreen
 import com.hatde.ass_kot1041.ui.screen.auth.SplashScreen
 import com.hatde.ass_kot1041.ui.screen.MainScreen
+import com.hatde.ass_kot1041.ui.screen.detail.ProductDetailScreen
+import com.hatde.ass_kot1041.ui.screen.product.ProductListScreen
 
 @Composable
 fun RootNavGraph(navController: NavHostController) {
@@ -26,5 +28,13 @@ fun RootNavGraph(navController: NavHostController) {
             )
         }
         composable("main") { MainScreen() }
+
+        composable("product_list") { ProductListScreen(navController) }
+        composable("product_detail/{productId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId") ?: ""
+            ProductDetailScreen(productId = productId)
+        }
     }
+
+
 }
