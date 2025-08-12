@@ -17,7 +17,7 @@ class CartViewModel : ViewModel() {
 
     private val api: CartService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://689aef87e727e9657f631c56.mockapi.io/")
+            .baseUrl("https://689aef87e727e9657f631c55.mockapi.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CartService::class.java)
