@@ -3,23 +3,24 @@ package com.hatde.ass_kot1041.ui.screen.detail
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
 import coil.compose.rememberAsyncImagePainter
 import com.hatde.ass_kot1041.viewmodel.ProductViewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import com.hatde.ass_kot1041.viewmodel.CartViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun ProductDetailScreen(
     productId: String,
-    productViewModel: ProductViewModel = viewModel()
+    productViewModel: ProductViewModel = viewModel(),
+    cartViewModel: CartViewModel = viewModel()
 ) {
     val product = productViewModel.products.collectAsState().value.find { it.id == productId }
+    var addedToCart by remember { mutableStateOf(false) }
 
     if (product != null) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -36,8 +37,17 @@ fun ProductDetailScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(product.description, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(24.dp))
-            Button(onClick = { /* TODO: Add to cart */ }, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = {
+                    cartViewModel.addToCart(product)
+                    addedToCart = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text("Thêm vào giỏ hàng")
+            }
+            if (addedToCart) {
+                Text("Đã thêm vào giỏ hàng!", color = Color.Green, modifier = Modifier.padding(top = 8.dp))
             }
         }
     } else {

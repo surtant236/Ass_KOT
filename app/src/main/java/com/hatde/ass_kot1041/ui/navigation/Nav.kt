@@ -1,5 +1,6 @@
 package com.hatde.ass_kot1041.ui.navigation
 
+import com.hatde.ass_kot1041.ui.screen.home.HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -18,7 +19,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
         startDestination = BottomBarScreen.Home.route,
         modifier = modifier
     ) {
-        composable(BottomBarScreen.Home.route) { HomeScreen() }
+        composable(BottomBarScreen.Home.route) { HomeScreen(navController) }
         composable(BottomBarScreen.Favorite.route) { FavoriteScreen() }
         composable(BottomBarScreen.Cart.route) { CartScreen() }
         // Sửa route để nhận productId
